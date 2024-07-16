@@ -13,7 +13,7 @@ public class DriveTrainOpmode extends LinearOpMode{
         double x = 0;
         while (opModeIsActive()){
             myMotor.setPower(Math.sin(x));
-            x += 0.00000001;
+            x += 0.01;
         }
     }
 }
