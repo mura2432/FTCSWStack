@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 @SuppressWarnings("unused")
 @TeleOp(name = "MecanumDriveOpmode")
-public class AidenDriveTrainOpmode extends LinearOpMode {
+public class DriveTrainOpmode extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Store gamepad state
