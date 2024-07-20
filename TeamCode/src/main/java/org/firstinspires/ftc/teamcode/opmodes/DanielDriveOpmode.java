@@ -2,9 +2,16 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+//import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+
+import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
+import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
+
+import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("unused")
 @TeleOp(name = "DanielDriveOpmode")
@@ -12,10 +19,8 @@ public class DanielDriveOpmode extends LinearOpMode {
 	@Override
 	public void runOpMode() {
 		// Store gamepad state
-
 		Gamepad currentGamepad1 = new Gamepad();
 		Gamepad currentGamepad2 = new Gamepad();
-
 		Gamepad previousGamepad1 = new Gamepad();
 		Gamepad previousGamepad2 = new Gamepad();
 
@@ -23,14 +28,36 @@ public class DanielDriveOpmode extends LinearOpMode {
 		double strafeMultiplier = 1.1;
 
 		// Robot configuration
-		DcMotor driveFrontLeftMotor = hardwareMap.get(DcMotor.class, "driveFrontLeftMotor");
-		DcMotor driveBackLeftMotor = hardwareMap.get(DcMotor.class, "driveBackLeftMotor");
-		DcMotor driveFrontRightMotor = hardwareMap.get(DcMotor.class, "driveFrontRightMotor");
-		DcMotor driveBackRightMotor = hardwareMap.get(DcMotor.class, "driveBackRightMotor");
+		List<PriorityMotor> driveMotors;
+		HardwareQueue hardwareQueue = new HardwareQueue();
+		PriorityMotor driveFrontLeftMotor = new PriorityMotor(
+			hardwareMap.get(DcMotorEx.class, "driveFrontLeftMotor"),
+			"driveFrontLeftMotor",
+			3, 5
+		);
+		PriorityMotor driveBackLeftMotor = new PriorityMotor(
+			hardwareMap.get(DcMotorEx.class, "driveBackLeftMotor"),
+			"driveBackLeftMotor",
+			3, 5
+		);
+		PriorityMotor driveFrontRightMotor = new PriorityMotor(
+			hardwareMap.get(DcMotorEx.class, "driveFrontRightMotor"),
+			"driveFrontRightMotor",
+			3, 5
+		);
+		PriorityMotor driveBackRightMotor = new PriorityMotor(
+			hardwareMap.get(DcMotorEx.class, "driveBackRightMotor"),
+			"driveBackRightMotor",
+			3, 5
+		);
+		driveMotors = Arrays.asList(driveFrontLeftMotor, driveBackLeftMotor, driveFrontRightMotor, driveBackRightMotor);
+		for (PriorityMotor motor : driveMotors) {
+			hardwareQueue.addDevice(motor);
+		}
 
 		// Assumes belt drive for each wheel
-		driveFrontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-		driveBackRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+		driveFrontRightMotor.motor[0].setDirection(DcMotorSimple.Direction.REVERSE);
+		driveBackRightMotor.motor[0].setDirection(DcMotorSimple.Direction.REVERSE);
 
 		waitForStart();
 		if (isStopRequested()) return;
@@ -53,10 +80,12 @@ public class DanielDriveOpmode extends LinearOpMode {
 			double frontRightPower = (straight - strafe - turn) / largestPower;
 			double backRightPower = (straight + strafe - turn) / largestPower;
 
-			driveFrontLeftMotor.setPower(frontLeftPower);
-			driveBackLeftMotor.setPower(backLeftPower);
-			driveFrontRightMotor.setPower(frontRightPower);
-			driveBackRightMotor.setPower(backRightPower);
+			driveFrontLeftMotor.setTargetPower(frontLeftPower);
+			driveBackLeftMotor.setTargetPower(backLeftPower);
+			driveFrontRightMotor.setTargetPower(frontRightPower);
+			driveBackRightMotor.setTargetPower(backRightPower);
+
+			hardwareQueue.update();
 		}
 	}
 }
