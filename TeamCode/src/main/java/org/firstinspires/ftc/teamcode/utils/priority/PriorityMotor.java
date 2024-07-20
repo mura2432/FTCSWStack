@@ -98,7 +98,7 @@ public class PriorityMotor extends PriorityDevice {
             return 0;
         }
 
-        return basePriority + Math.abs(power-lastPower) + (System.nanoTime() - lastUpdateTime)/1000000.0 * priorityScale;
+        return basePriority + Math.abs(power-lastPower) * (System.nanoTime() - lastUpdateTime)/1000000.0 * priorityScale;
     }
 
     @Override
