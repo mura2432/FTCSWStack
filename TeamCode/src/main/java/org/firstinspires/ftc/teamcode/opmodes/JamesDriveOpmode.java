@@ -41,6 +41,8 @@ public class JamesDriveOpmode extends LinearOpMode {
         waitForStart();
         if(isStopRequested()) return;
 
+        //Question! How do i implement it again?
+
         while(opModeIsActive()){
             double straight_y = -gp.left_stick_y;
             double strafe_x = gp.left_stick_x;
