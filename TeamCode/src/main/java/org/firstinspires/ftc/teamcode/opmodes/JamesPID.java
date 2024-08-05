@@ -11,7 +11,6 @@ public class JamesPID {
         this.kd = kd;
     }
 
-    double reference = 0.0;
     double integralSum = 0.0;
     double lastError = 0.0;
     double loopTime = 0.0;
