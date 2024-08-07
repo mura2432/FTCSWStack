@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+import static java.lang.Math.max;
+
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -34,7 +36,7 @@ public class JamesMotorIntake{
                 pm.setTargetPower(1.0);
                 break;
             case ANTISTALL:
-                pm.setTargetPower(pm.getPower() - 0.1);
+                pm.setTargetPower(max(pm.getPower() - 0.1, -1.0));
                 break;
             case REVERSE:
                 pm.setTargetPower(-1.0);
@@ -42,5 +44,20 @@ public class JamesMotorIntake{
         }
     }
 
+    public void setOff(){
+        motorState = MotorState.OFF;
+    }
+
+    public void setON(){
+        motorState = MotorState.ON;
+    }
+
+    public void setAntiStall(){
+        motorState = MotorState.ANTISTALL;
+    }
+
+    public void setReverse(){
+        motorState = MotorState.REVERSE;
+    }
 
 }
