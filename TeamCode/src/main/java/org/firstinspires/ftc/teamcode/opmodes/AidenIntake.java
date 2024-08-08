@@ -12,58 +12,30 @@ import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityServo;
 
 public class AidenIntake extends OpMode {
-    PriorityMotor IntakeMotor = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "IntakeMotor"), "IntakeMotor", 3, 5);
-    hq.addDevice(IntakeMotor);
+    PriorityMotor intakeMotor = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "IntakeMotor"), "IntakeMotor", 3, 5);
+     public HardwareQueue hardwareQueue;
+    hardwareQueue.addDevice(intakeMotor);
     public enum IntakeState {
         INTAKE_ON,
         INTAKE_OFF,
         ANTISTALL,
         REVERSE
     };
-    IntakeState intakeState = IntakeState.INTAKE_ON
-    public enum AntiStallState{
-        ANTI_STALL_ON,
-        ANTI_STALL_OFF
-    };
-    public enum ReverseState{
-        REVERSE_ON,
-        REVERSE_OFF
-    };
-    ReverseState reverseState = ReverseState.REVERSE_OFF;
-    AntiStallState antiStallState = AntiStallState.ANTI_STALL_OFF;
+    IntakeState intakeState = IntakeState;
     public void updateMotors(){
         switch (intakeState) {
             case INTAKE_ON:
-                IntakeMotor.setTargetPower(0.45);
+                intakeMotor.setTargetPower(0.45);
 
                 break;
             case INTAKE_OFF:
-                IntakeMotor.setTargetPower(0);
+                intakeMotor.setTargetPower(0);
                 break;
             case ANTISTALL:
-                antiStallState = AntiStallState.ANTI_STALL_ON;
+                
                 break;
             case REVERSE:
-                reverseState = ReverseState.REVERSE_ON;
+                intakeMotor.setTargetPower(-0.5);
                 break;
-        }
-        switch (antiStallState) {
-            case ANTI_STALL_ON:
-                for(int i=0;i<90;i++){
-                    IntakeMotor.setTargetPower(Math.sin(-i));
-                }
-                break;
-            case ANTI_STALL_OFF:
-                IntakeMotor.setTargetPower(0);
-                break;
-        }
-        switch (reverseState) {
-            case REVERSE_ON:
-                IntakeMotor.setTargetPower(-1);
-                break;
-            case REVERSE_OFF:
-                IntakeMotor.setTargetPower(0);
-                break;
-        }
     }
 }
