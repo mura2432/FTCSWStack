@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 
 public class DanielIntake {
-	public enum IntakeState {
+	public enum IntakeMotorState {
 		ON,
 		OFF,
 		ANTISTALL,
@@ -19,7 +19,7 @@ public class DanielIntake {
 	public static final double antiStallRampStep = 0.1;
 
 	public PriorityMotor intakeMotor;
-	private IntakeState intakeState;
+	private IntakeMotorState intakeMotorState = IntakeMotorState.OFF;
 
 	public DanielIntake(HardwareMap hardwareMap, HardwareQueue hardwareQueue) {
 		PriorityMotor intakeMotor = new PriorityMotor(
@@ -31,7 +31,7 @@ public class DanielIntake {
 	}
 
 	public void update(){
-		switch(intakeState){
+		switch(intakeMotorState){
 			case OFF:
 				intakeMotor.setTargetPower(0.0);
 				break;
@@ -45,17 +45,17 @@ public class DanielIntake {
 				intakeMotor.setTargetPower(-1.0);
 				break;
 			default:
-				throw new IllegalStateException("Unexpected value for intakeState: " + intakeState);
+				throw new IllegalStateException("Unexpected value for intakeMotorState: " + intakeMotorState);
 		}
 	}
 
-	public IntakeState getIntakeState() { return intakeState; }
+	public IntakeMotorState getIntakeMotorState() { return intakeMotorState; }
 
-	public void setOff() { intakeState = IntakeState.OFF; }
+	public void setOff() { intakeMotorState = IntakeMotorState.OFF; }
 
-	public void setOn() { intakeState = IntakeState.ON; }
+	public void setOn() { intakeMotorState = IntakeMotorState.ON; }
 
-	public void setAntiStall() { intakeState = IntakeState.ANTISTALL; }
+	public void setAntiStall() { intakeMotorState = IntakeMotorState.ANTISTALL; }
 
-	public void setReverse() { intakeState = IntakeState.REVERSE; }
+	public void setReverse() { intakeMotorState = IntakeMotorState.REVERSE; }
 }
