@@ -14,6 +14,7 @@ public class DanielSlides {
 	}
 
 	public static final double KP = 1;
+	public static final double powerConstantTerm = 0.05;
 
 	public PriorityMotor slidesMotor;
 	private SlidesMotorState slidesMotorState = SlidesMotorState.OFF;
@@ -37,7 +38,7 @@ public class DanielSlides {
 				break;
 			case ON:
 				currentPosition = slidesMotor.motor[0].getCurrentPosition();
-				slidesMotor.setTargetPower(Utils.minMaxClip((targetPosition - currentPosition) * KP, -1.0, 1.0));
+				slidesMotor.setTargetPower(Utils.minMaxClip((targetPosition - currentPosition) * KP + powerConstantTerm, -1.0, 1.0));
 				break;
 			default:
 				throw new IllegalStateException("Unexpected value for slidesMotorState: " + slidesMotorState);
