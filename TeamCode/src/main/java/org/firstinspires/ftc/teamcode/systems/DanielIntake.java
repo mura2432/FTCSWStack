@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.systems;
 import static java.lang.Math.max;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 
 public class DanielIntake {
@@ -16,21 +14,23 @@ public class DanielIntake {
 		REVERSE
 	}
 
-	public static final double antiStallRampStep = 0.1;
+	public static double antiStallRampStep = 0.1;
 
-	public PriorityMotor intakeMotor;
+	public final DanielRobot robot;
+	public final PriorityMotor intakeMotor;
 	private IntakeMotorState intakeMotorState = IntakeMotorState.OFF;
 
-	public DanielIntake(HardwareMap hardwareMap, HardwareQueue hardwareQueue) {
-		PriorityMotor intakeMotor = new PriorityMotor(
-				hardwareMap.get(DcMotorEx.class, "intakeMotor"),
+	public DanielIntake(DanielRobot robot) {
+		this.robot = robot;
+		intakeMotor = new PriorityMotor(
+				robot.hardwareMap.get(DcMotorEx.class, "intakeMotor"),
 				"intakeMotor",
 				3, 5
 		);
-		hardwareQueue.addDevice(intakeMotor);
+		robot.hardwareQueue.addDevice(intakeMotor);
 	}
 
-	public void update(){
+	public void update() {
 		switch(intakeMotorState){
 			case OFF:
 				intakeMotor.setTargetPower(0.0);
