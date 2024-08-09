@@ -18,8 +18,8 @@ public class DanielSlides {
 	public final PriorityMotor slidesMotor;
 	private SlidesMotorState slidesMotorState = SlidesMotorState.OFF;
 
-	private double currentPosition;
-	private double targetPosition;
+	private double currentPosition = 0;
+	private double targetPosition = 0;
 
 	public DanielSlides(DanielRobot robot) {
 		this.robot = robot;
@@ -29,6 +29,9 @@ public class DanielSlides {
 				3, 5
 		);
 		robot.hardwareQueue.addDevice(slidesMotor);
+
+		slidesMotor.motor[0].setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+		slidesMotor.motor[0].setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 	}
 
 	public void update() {
