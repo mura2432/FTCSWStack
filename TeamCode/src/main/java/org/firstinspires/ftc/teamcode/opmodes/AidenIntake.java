@@ -12,8 +12,12 @@ import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityServo;
 
 public class AidenIntake extends OpMode {
-    PriorityMotor intakeMotor = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "IntakeMotor"), "IntakeMotor", 3, 5);
-     public HardwareQueue hardwareQueue;
+    public AidenIntake(HardwareMap hardwareMap, HardwareQueue hardwareQueue) {
+        PriorityMotor intakeMotor = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "IntakeMotor"), "IntakeMotor", 3, 5);
+        this.intakeState = IntakeState;
+        hardwareQueue.addDevice(intakeMotor);
+    }
+    public HardwareQueue hardwareQueue;
     hardwareQueue.addDevice(intakeMotor);
     public enum IntakeState {
         INTAKE_ON,
