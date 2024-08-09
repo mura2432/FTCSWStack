@@ -6,6 +6,7 @@ import static java.lang.Math.max;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
@@ -21,10 +22,11 @@ public class JamesMotorIntake{
 
     MotorState motorState = MotorState.OFF;
     PriorityMotor pm;
-
-    public JamesMotorIntake(HardwareQueue hq){
+    double reverse;
+    public JamesMotorIntake(HardwareQueue hardwareQueue, HardwareMap hardwareMap){
         pm = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "pm"), "pm", 3, 5);
-        hq.addDevice(pm);
+        hardwareQueue.addDevice(pm);
+        reverse = -1.0;
     }
 
     public void update(){
@@ -39,7 +41,7 @@ public class JamesMotorIntake{
                 pm.setTargetPower(max(pm.getPower() - 0.1, -1.0));
                 break;
             case REVERSE:
-                pm.setTargetPower(-1.0);
+                pm.setTargetPower(reverse);
                 break;
         }
     }
@@ -56,8 +58,9 @@ public class JamesMotorIntake{
         motorState = MotorState.ANTISTALL;
     }
 
-    public void setReverse(){
+    public void setReverse(double r){
         motorState = MotorState.REVERSE;
+        this.reverse = r;
     }
 
 }

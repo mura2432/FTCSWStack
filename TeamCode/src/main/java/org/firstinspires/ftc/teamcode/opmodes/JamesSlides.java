@@ -13,7 +13,7 @@ public class JamesSlides {
     PriorityMotor pm;
     SlideState ss = SlideState.OFF;
     JamesFeedForward ff;
-    public JamesSlides(double target, PriorityMotor pm, HardwareQueue hq){
+    public JamesSlides(double target, PriorityMotor pm, HardwareQueue hardwareQueue){
         this.target = target;
         this.pm = pm;
         this.ff = new JamesFeedForward(1.5, 1.0);
