@@ -11,7 +11,7 @@ public class JamesRobot {
 
     public JamesRobot(){
         hardwareQueue = new HardwareQueue();
-        hardwareMap = new HardwareMap();
+        hardwareMap = new HardwareMap()
         intake = new JamesMotorIntake(hardwareQueue, hardwareMap);
     }
 
