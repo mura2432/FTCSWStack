@@ -34,7 +34,7 @@ public class JamesDriveTrain {
         double turn = 0.75 * gamepad.right_stick_x;
 
         double denom = Math.max(Math.abs(forward) + Math.abs(strafe) + Math.abs(turn), 1.0);
-        double leftFrontPower = (forward + strafe + turn)/denom;
+        double leftFrontPower = (forward + strafe + turn)/ denom;
         double leftBackPower = (forward - strafe + turn) / denom;
         double rightFrontPower = (forward - strafe - turn) / denom;
         double rightBackPower = (forward + strafe - turn) / denom;
