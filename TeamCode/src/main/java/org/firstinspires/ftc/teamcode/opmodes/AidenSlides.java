@@ -20,17 +20,19 @@ public class AidenSlides(){
     double kp = 1;
     double powerConstant = 0.1;
     double slidesPower = 1.0;
+    double targetPosition;
+
 
     public AidenSlides(HardwareMap hardwareMap, HardwareQueue hardwareQueue) {
-        slideMotor = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "slides"), "slides", 2, 5, -1);
+        slideMotor = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "slides"), "slides", 2, 5, 1);
         this.slidesState = SlidesState.OFF;
         hardwareQueue.addDevice(slidesMotor);
     }
 
-    public void slidesUpdate(double targetPosition, double currentPosition){
+    public void slidesUpdate(){
         switch (slidesState){
             case ON:
-                double currentPos = slidesMotor.motor[0].getCurrentPosition();
+                double currentPosition = slidesMotor.motor[0].getCurrentPosition();
                 slidesMotor.setTargetPower(slidesPower);
                 slideMotor.setTargetPower(Utils.minMaxClip((targetPosition - currentPosition) * kp+powerConstant, -1.0, 1.0));
                 break;
