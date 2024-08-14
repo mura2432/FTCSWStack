@@ -27,7 +27,7 @@ public class JamesSlides {
         this.sensors = sensor;
     }
 
-    public void update(double error){
+    public void update(){
         switch(ss){
             case ON:
                 //double currPos = pm.motor[0].getCurrentPosition();
@@ -38,6 +38,10 @@ public class JamesSlides {
                 pm.setTargetPower(0.0);
                 break;
         }
+    }
+
+    public double getCurrPos(){
+        return currPos;
     }
 
     public void setTarget(double target){
