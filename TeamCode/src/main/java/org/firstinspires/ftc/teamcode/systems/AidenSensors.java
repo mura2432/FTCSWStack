@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.systems;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.opmodes.AidenRobot;
 import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
-import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 
 public class AidenSensors {
     private LynxModule controlHub, expansionHub;
