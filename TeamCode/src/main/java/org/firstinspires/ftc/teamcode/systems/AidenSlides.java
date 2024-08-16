@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.systems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 @Config
 
-public class AidenSlides(){
+public class AidenSlides{
     public enum SlidesState {
         ON,
         OFF
@@ -26,7 +26,7 @@ public class AidenSlides(){
     public AidenSlides(HardwareMap hardwareMap, HardwareQueue hardwareQueue) {
         slideMotor = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "slides"), "slides", 2, 5, 1);
         this.slidesState = SlidesState.OFF;
-        hardwareQueue.addDevice(slidesMotor);
+        hardwareQueue.addDevice(slideMotor);
     }
 
     public void slidesUpdate(){
