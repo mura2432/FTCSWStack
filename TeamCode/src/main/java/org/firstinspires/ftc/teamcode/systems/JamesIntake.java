@@ -4,59 +4,98 @@ import static java.lang.Math.max;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
+import org.firstinspires.ftc.teamcode.utils.priority.PriorityServo;
 
 public class JamesIntake {
-    enum MotorState {
-        ON,
-        OFF,
-        ANTISTALL,
-        REVERSE
+    private JamesSlides slides;
+    private PriorityServo rotateServo, left, right;
+    private boolean currDirectionRotated, readyToGrab = false;
+    private double holdAngle = Math.PI/2, releaseAngle = Math.PI * 3/2;
+
+    public enum IntakeState{
+        STANDBY,
+        CLOSE
     };
 
-    MotorState motorState = MotorState.OFF;
-    PriorityMotor pm;
-    double reverse;
-    public JamesIntake(HardwareQueue hardwareQueue, HardwareMap hardwareMap){
-        pm = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "pm"), "pm", 3, 5);
-        hardwareQueue.addDevice(pm);
-        reverse = -1.0;
+    private IntakeState intakeStates;
+
+    public JamesIntake(HardwareQueue hardwareQueue, HardwareMap hardwareMap, JamesSensors sensors){
+        Servo rotate = hardwareMap.get(Servo.class, "rotate");
+        rotateServo = new PriorityServo(rotate, "rotateServo", PriorityServo.ServoType.SPEED, 1.0, 0.0, 1.0, 0.0, false, 3.0, 5.0);
+
+        Servo releaseL = hardwareMap.get(Servo.class, "releaseL");
+        Servo releaseR = hardwareMap.get(Servo.class, "releaseR");
+        left = new PriorityServo(releaseL, "left", PriorityServo.ServoType.SPEED, 1.0, 0.0, 1.0, 0.0, false, 3.0, 5.0);
+        right = new PriorityServo(releaseR, "right", PriorityServo.ServoType.SPEED, 1.0, 0.0, 1.0, 0.0, false, 3.0, 5.0);
+
+        slides = new JamesSlides(hardwareQueue, hardwareMap, sensors);
+
+        hardwareQueue.addDevice(left);
+        hardwareQueue.addDevice(right);
+
+        currDirectionRotated = false;
+        intakeStates = IntakeState.STANDBY;
     }
 
     public void update(){
-        switch(motorState){
-            case OFF:
-                pm.setTargetPower(0.0);
+        switch(intakeStates){
+            case STANDBY:
+                releaseLeftBall();
+                releaseRightBall();
+                if(readyToGrab){intakeStates = IntakeState.CLOSE; readyToGrab = false};
                 break;
-            case ON:
-                pm.setTargetPower(1.0);
-                break;
-            case ANTISTALL:
-                pm.setTargetPower(max(pm.getPower() - 0.1, -1.0));
-                break;
-            case REVERSE:
-                pm.setTargetPower(reverse);
-                break;
+            case CLOSE:
+                grabLeftBall();
+                grabRightBall();
         }
     }
 
-    public void setOff(){
-        motorState = MotorState.OFF;
+    public void reset(){intakeStates = IntakeState.STANDBY;}
+
+    public void ready(){readyToGrab = true;}
+
+    public void rotateReleaseBox(){
+        if(currDirectionRotated){
+            rotateServo.setTargetAngle(0.0, 1.0);
+        }else{
+            rotateServo.setTargetAngle(Math.PI, 1.0);
+        }
+        currDirectionRotated = !currDirectionRotated;
     }
 
-    public void setON(){
-        motorState = MotorState.ON;
+    public void releaseLeftBall(){
+        if(currDirectionRotated){
+            right.setTargetAngle(releaseAngle, 1.0);
+        }else{
+            left.setTargetAngle(releaseAngle, 1.0);
+        }
     }
 
-    public void setAntiStall(){
-        motorState = MotorState.ANTISTALL;
+    public void releaseRightBall(){
+        if(currDirectionRotated){
+            left.setTargetAngle(releaseAngle, 1.0);
+        }else{
+            right.setTargetAngle(releaseAngle, 1.0);
+        }
     }
 
-    public void setReverse(double r){
-        motorState = MotorState.REVERSE;
-        this.reverse = r;
+    public void grabLeftBall(){
+        if(currDirectionRotated){
+            right.setTargetAngle(holdAngle, 1.0);
+        }else{
+            left.setTargetAngle(holdAngle, 1.0);
+        }
     }
 
+    public void grabRightBall(){
+        if(currDirectionRotated){
+            left.setTargetAngle(holdAngle, 1.0);
+        }else{
+            right.setTargetAngle(holdAngle, 1.0);
+        }
+    }
 }

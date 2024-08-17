@@ -23,7 +23,7 @@ public class JamesRobot {
 
         driveTrain = new JamesDriveTrain(hardwareQueue, hardwareMap, sensors);
 
-        intake = new JamesIntake(hardwareQueue, hardwareMap);
+        intake = new JamesIntake(hardwareQueue, hardwareMap, sensors);
         slides = new JamesSlides(hardwareQueue, hardwareMap, sensors);
         deposit = new JamesDeposit(hardwareQueue, hardwareMap, sensors);
     }
