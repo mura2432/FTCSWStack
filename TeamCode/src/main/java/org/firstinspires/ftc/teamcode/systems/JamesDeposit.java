@@ -95,7 +95,6 @@ public class JamesDeposit {
             case DEPOSIT:
                 releaseRightBall();
                 releaseLeftBall();
-                if(finished){depositStates = DepositStates.STANDBY; finished = false;}
                 break;
         }
         slides.update();
@@ -107,21 +106,11 @@ public class JamesDeposit {
 
     public void startDepositSetup() {readyToStart = true;}
 
-    public void startDepositBalls(){
-        ready = true;
-    }
+    public void startDepositBalls(){ready = true;}
 
-    public void depositFinished(){
-        finished = true;
-    }
+    public void setTargetHeight(double target){targetHeight = target;}
 
-    public void setTargetHeight(double target){
-        targetHeight = target;
-    }
-
-    public void setArmAngle(double target){
-        armServos.setTargetAngle(target, 1.0);
-    }
+    public void setArmAngle(double target){armServos.setTargetAngle(target, 1.0);}
 
     public void rotateReleaseBox(){
         if(currDirectionRotated){

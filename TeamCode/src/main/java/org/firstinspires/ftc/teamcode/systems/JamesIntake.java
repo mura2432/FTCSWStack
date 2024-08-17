@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 
-public class JamesMotorIntake{
+public class JamesIntake {
     enum MotorState {
         ON,
         OFF,
@@ -19,7 +19,7 @@ public class JamesMotorIntake{
     MotorState motorState = MotorState.OFF;
     PriorityMotor pm;
     double reverse;
-    public JamesMotorIntake(HardwareQueue hardwareQueue, HardwareMap hardwareMap){
+    public JamesIntake(HardwareQueue hardwareQueue, HardwareMap hardwareMap){
         pm = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "pm"), "pm", 3, 5);
         hardwareQueue.addDevice(pm);
         reverse = -1.0;

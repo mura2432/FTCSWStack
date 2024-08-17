@@ -5,11 +5,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Drive.JamesDriveTrain;
 import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
-import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 
 public class JamesRobot {
     public HardwareQueue hardwareQueue;
-    public JamesMotorIntake intake;
+    public JamesIntake intake;
     public JamesSlides slides;
     public JamesSensors sensors;
     public JamesDeposit deposit;
@@ -24,7 +23,7 @@ public class JamesRobot {
 
         driveTrain = new JamesDriveTrain(hardwareQueue, hardwareMap, sensors);
 
-        intake = new JamesMotorIntake(hardwareQueue, hardwareMap);
+        intake = new JamesIntake(hardwareQueue, hardwareMap);
         slides = new JamesSlides(hardwareQueue, hardwareMap, sensors);
         deposit = new JamesDeposit(hardwareQueue, hardwareMap, sensors);
     }
