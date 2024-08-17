@@ -12,7 +12,7 @@ public class AidenRobot{
 
     public AidenRobot(){
         hardwareQueue = new HardwareQueue();
-        hardwareMap = new HardwareMap()
+        hardwareMap = new HardwareMap();
         intake = new AidenIntake(hardwareQueue, hardwareMap);
         slides = new AidenSlides(hardwareQueue, hardwareMap);
     }

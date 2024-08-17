@@ -27,9 +27,9 @@ public class AidenDriveTrain extends LinearOpMode {
             double y = -gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x * 1.1;
             double rx = gamepad1.right_stick_x;
-            double intake = gamepad1.b;
-            double slidesup = gamepad1.y;
-            double slidesdown = gamepad1.a
+            boolean intake = gamepad1.b;
+            boolean slidesup = gamepad1.y;
+            boolean slidesdown = gamepad1.a;
 
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
             double frontLeftPower = (y + x + rx) / denominator;
