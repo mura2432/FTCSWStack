@@ -68,12 +68,18 @@ public class JamesDeposit {
                 grabLeftBall();
 
                 //if target ball(s) are grabbed, transition to TURN state
+                if(left.inPosition() && right.inPosition()){
+                    depositStates = DepositStates.TURN;
+                }
                 break;
             // flip arm
             case TURN:
                 setArmAngle(armAngleUp);
 
                 //if arm angle is reached, transition to LIFT state
+                if(armServos.inPosition()){
+                    depositStates = DepositStates.LIFT;
+                }
                 break;
             // raise arm up
             case LIFT:
@@ -93,6 +99,10 @@ public class JamesDeposit {
                 break;
         }
         slides.update();
+    }
+
+    public void reset(){
+        depositStates = DepositStates.STANDBY;
     }
 
     public void startDepositSetup() {readyToStart = true;}
