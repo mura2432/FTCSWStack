@@ -12,13 +12,13 @@ public class JamesTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        JamesRobot r = new JamesRobot(hardwareMap);
-
+        JamesRobot robot = new JamesRobot(hardwareMap);
+        //not sure what gamepad2 is for...
         waitForStart();
 
         while(opModeIsActive()){
-            r.driveTrain.drive(gamepad1);
-            r.update();
+            robot.driveTrain.drive(gamepad1);
+            robot.update();
         }
 
     }
