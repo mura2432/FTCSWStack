@@ -34,6 +34,9 @@ public class JamesTeleop extends LinearOpMode {
         //rotate release box
         ButtonToggle rightBumper = new ButtonToggle();
 
+        //slides height
+        ButtonToggle hat = new ButtonToggle();
+
         //confirm robot is in reset state
         while (opModeInInit()) {
             robot.intake.reset();
@@ -80,6 +83,14 @@ public class JamesTeleop extends LinearOpMode {
             //rotate release box button
             if(rightBumper.isClicked(gamepad1.right_bumper)){
                 robot.intake.rotateReleaseBox();
+            }
+
+            //adjust slides height manually
+            if(hat.isHeld(gamepad1.dpad_up, 0.1)){
+                robot.slides.setTarget(robot.slides.getCurrPos() + 0.5);
+            }
+            if(hat.isHeld(gamepad1.dpad_down, 0.1)){
+                robot.slides.setTarget(robot.slides.getCurrPos() - 0.5);
             }
 
             robot.update();
