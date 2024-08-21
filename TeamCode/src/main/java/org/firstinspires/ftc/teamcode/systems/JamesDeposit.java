@@ -62,16 +62,6 @@ public class JamesDeposit {
                 //check if ready now
                 if(readyToStart){depositStates = DepositStates.CLOSE; readyToStart = false;}
                 break;
-            // grab the ball
-            case CLOSE:
-                grabRightBall();
-                grabLeftBall();
-
-                //if target ball(s) are grabbed, transition to TURN state
-                if(left.inPosition() && right.inPosition()){
-                    depositStates = DepositStates.TURN;
-                }
-                break;
             // flip arm
             case TURN:
                 setArmAngle(armAngleUp);
@@ -86,15 +76,6 @@ public class JamesDeposit {
                 slides.setTarget(targetHeight);
 
                 if(slides.getCurrPos() == targetHeight) {depositStates = DepositStates.DEPOSITReady;}
-                break;
-            // wait for robot to get into position, any flips, etc
-            case DEPOSITReady:
-                if(ready){depositStates = DepositStates.DEPOSIT; ready = false;}
-                break;
-            //release the balls
-            case DEPOSIT:
-                releaseRightBall();
-                releaseLeftBall();
                 break;
         }
         slides.update();
@@ -150,6 +131,38 @@ public class JamesDeposit {
             left.setTargetAngle(holdAngle, 1.0);
         }else{
             right.setTargetAngle(holdAngle, 1.0);
+        }
+    }
+
+    public void toggleLeftFlipper(){
+        if(currDirectionRotated){
+            if(right.getCurrentAngle() == holdAngle){
+                releaseRightBall();
+            }else{
+                grabRightBall();
+            }
+        }else{
+            if(left.getCurrentAngle() == holdAngle){
+                releaseLeftBall();
+            }else{
+                grabLeftBall();
+            }
+        }
+    }
+
+    public void toggleRightFlipper(){
+        if(currDirectionRotated){
+            if(left.getCurrentAngle() == holdAngle){
+                releaseLeftBall();
+            }else{
+                grabLeftBall();
+            }
+        }else{
+            if(left.getCurrentAngle() == holdAngle){
+                releaseRightBall();
+            }else{
+                grabRightBall();
+            }
         }
     }
 }

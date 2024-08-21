@@ -19,27 +19,26 @@ public class JamesTeleop extends LinearOpMode {
 
         //gamepad 1 - all one one controller right now due to simpler robot
 
-        //start intake system
-        ButtonToggle a = new ButtonToggle();
-        //reset intake system
-        ButtonToggle b = new ButtonToggle();
+        //NOTE: Intake class is currenlty blank because getting to the ball(intake process)
+        //      is currenlty user controlled and does not need a finite state machine
 
         //start deposit system
         ButtonToggle x = new ButtonToggle();
         //reset deposit system
         ButtonToggle y = new ButtonToggle();
-        //actually drop ball
-        ButtonToggle leftBumper = new ButtonToggle();
 
-        //rotate release box
+        //toggle left flipper to grab or release
+        ButtonToggle leftBumper = new ButtonToggle();
+        //toggle right flipper to grab or release
         ButtonToggle rightBumper = new ButtonToggle();
 
+        //rotate box
+        ButtonToggle a = new ButtonToggle();
         //slides height
         ButtonToggle hat = new ButtonToggle();
 
         //confirm robot is in reset state
         while (opModeInInit()) {
-            robot.intake.reset();
             robot.deposit.reset();
 
             robot.update();
@@ -53,44 +52,32 @@ public class JamesTeleop extends LinearOpMode {
         while(opModeIsActive()){
             robot.driveTrain.drive(gamepad1);
 
-            //okay the intake sections is like really scuffed bc (1) i didnt get finite state machines back then and (2) it was for just a motor system i gotta fix this later
-            if(a.isClicked(gamepad1.a)){
-                //check system here
-                robot.intake.ready();
-            }
-
-            if(b.isClicked(gamepad1.b)){
-                //check system here
-                robot.intake.reset();
-            }
-
-            //deposit section
-            //initiate deposit sequence up to ball drop
             if(x.isClicked(gamepad1.x)){
                 robot.deposit.startDepositSetup();
             }
 
-            //drop the balls
-            if(leftBumper.isClicked(gamepad1.left_bumper)){
-                robot.deposit.startDepositBalls();
-            }
-
-            //manual reset mid system or after deposit is finished
             if(y.isClicked(gamepad1.y)){
                 robot.deposit.reset();
             }
 
-            //rotate release box button
-            if(rightBumper.isClicked(gamepad1.right_bumper)){
+            if(leftBumper.isClicked(gamepad1.left_bumper)){
+                robot.deposit.toggleLeftFlipper();
+            }
+
+            if(rightBumper.isClicked(gamepad1.left_bumper)){
+                robot.deposit.toggleRightFlipper();
+            }
+
+            if(a.isClicked(gamepad1.a)){
                 robot.intake.rotateReleaseBox();
             }
 
-            //adjust slides height manually
-            if(hat.isHeld(gamepad1.dpad_up, 0.1)){
-                robot.slides.setTarget(robot.slides.getCurrPos() + 0.5);
+            if(hat.isHeld(gamepad1.dpad_up, 10)){
+                robot.slides.setTarget(Math.min(1.0, robot.slides.getCurrPos() + 0.05));
             }
-            if(hat.isHeld(gamepad1.dpad_down, 0.1)){
-                robot.slides.setTarget(robot.slides.getCurrPos() - 0.5);
+
+            if(hat.isHeld(gamepad1.dpad_down, 10)){
+                robot.slides.setTarget(Math.max(0.0, robot.slides.getCurrPos() - 0.05));
             }
 
             robot.update();

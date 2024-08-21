@@ -16,13 +16,6 @@ public class JamesIntake {
     private boolean currDirectionRotated, readyToGrab = false;
     private double holdAngle = Math.PI/2, releaseAngle = Math.PI * 3/2;
 
-    public enum IntakeState{
-        STANDBY,
-        CLOSE
-    };
-
-    private IntakeState intakeStates;
-
     public JamesIntake(HardwareQueue hardwareQueue, HardwareMap hardwareMap, JamesSensors sensors){
         Servo rotate = hardwareMap.get(Servo.class, "rotate");
         rotateServo = new PriorityServo(rotate, "rotateServo", PriorityServo.ServoType.SPEED, 1.0, 0.0, 1.0, 0.0, false, 3.0, 5.0);
@@ -38,25 +31,12 @@ public class JamesIntake {
         hardwareQueue.addDevice(right);
 
         currDirectionRotated = false;
-        intakeStates = IntakeState.STANDBY;
+
     }
 
     public void update(){
-        switch(intakeStates){
-            case STANDBY:
-                releaseLeftBall();
-                releaseRightBall();
-                if(readyToGrab){intakeStates = IntakeState.CLOSE; readyToGrab = false};
-                break;
-            case CLOSE:
-                grabLeftBall();
-                grabRightBall();
-        }
+
     }
-
-    public void reset(){intakeStates = IntakeState.STANDBY;}
-
-    public void ready(){readyToGrab = true;}
 
     public void rotateReleaseBox(){
         if(currDirectionRotated){
