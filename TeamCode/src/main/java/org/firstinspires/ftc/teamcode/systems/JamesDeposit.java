@@ -62,18 +62,14 @@ public class JamesDeposit {
                 //check if ready now
                 if(readyToStart){depositStates = DepositStates.CLOSE; readyToStart = false;}
                 break;
-            // grab the ball
-            case CLOSE:
-                grabRightBall();
-                grabLeftBall();
-
-                //if target ball(s) are grabbed, transition to TURN state
-                break;
             // flip arm
             case TURN:
                 setArmAngle(armAngleUp);
 
                 //if arm angle is reached, transition to LIFT state
+                if(armServos.inPosition()){
+                    depositStates = DepositStates.LIFT;
+                }
                 break;
             // raise arm up
             case LIFT:
@@ -81,37 +77,21 @@ public class JamesDeposit {
 
                 if(slides.getCurrPos() == targetHeight) {depositStates = DepositStates.DEPOSITReady;}
                 break;
-            // wait for robot to get into position, any flips, etc
-            case DEPOSITReady:
-                if(ready){depositStates = DepositStates.DEPOSIT; ready = false;}
-                break;
-            //release the balls
-            case DEPOSIT:
-                releaseRightBall();
-                releaseLeftBall();
-                if(finished){depositStates = DepositStates.STANDBY; finished = false;}
-                break;
         }
         slides.update();
     }
 
+    public void reset(){
+        depositStates = DepositStates.STANDBY;
+    }
+
     public void startDepositSetup() {readyToStart = true;}
 
-    public void startDepositBalls(){
-        ready = true;
-    }
+    public void startDepositBalls(){ready = true;}
 
-    public void depositFinished(){
-        finished = true;
-    }
+    public void setTargetHeight(double target){targetHeight = target;}
 
-    public void setTargetHeight(double target){
-        targetHeight = target;
-    }
-
-    public void setArmAngle(double target){
-        armServos.setTargetAngle(target, 1.0);
-    }
+    public void setArmAngle(double target){armServos.setTargetAngle(target, 1.0);}
 
     public void rotateReleaseBox(){
         if(currDirectionRotated){
@@ -151,6 +131,38 @@ public class JamesDeposit {
             left.setTargetAngle(holdAngle, 1.0);
         }else{
             right.setTargetAngle(holdAngle, 1.0);
+        }
+    }
+
+    public void toggleLeftFlipper(){
+        if(currDirectionRotated){
+            if(right.getCurrentAngle() == holdAngle){
+                releaseRightBall();
+            }else{
+                grabRightBall();
+            }
+        }else{
+            if(left.getCurrentAngle() == holdAngle){
+                releaseLeftBall();
+            }else{
+                grabLeftBall();
+            }
+        }
+    }
+
+    public void toggleRightFlipper(){
+        if(currDirectionRotated){
+            if(left.getCurrentAngle() == holdAngle){
+                releaseLeftBall();
+            }else{
+                grabLeftBall();
+            }
+        }else{
+            if(left.getCurrentAngle() == holdAngle){
+                releaseRightBall();
+            }else{
+                grabRightBall();
+            }
         }
     }
 }
