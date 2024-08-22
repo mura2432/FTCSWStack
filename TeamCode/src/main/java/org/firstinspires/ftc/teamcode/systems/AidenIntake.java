@@ -8,20 +8,18 @@ import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 
 public class AidenIntake extends OpMode {
+    PriorityMotor intakeMotor;
     public AidenIntake(HardwareMap hardwareMap, HardwareQueue hardwareQueue) {
         PriorityMotor intakeMotor = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "IntakeMotor"), "IntakeMotor", 3, 5);
-        this.intakeState = IntakeState;
         hardwareQueue.addDevice(intakeMotor);
     }
-    public HardwareQueue hardwareQueue;
-    hardwareQueue.addDevice(intakeMotor);
     public enum IntakeState {
         INTAKE_ON,
         INTAKE_OFF,
         ANTISTALL,
         REVERSE
     };
-    IntakeState intakeState = IntakeState;
+    IntakeState intakeState = IntakeState.INTAKE_OFF;
     public void updateIntake(){
         switch (intakeState) {
             case INTAKE_ON:
@@ -32,7 +30,7 @@ public class AidenIntake extends OpMode {
                 intakeMotor.setTargetPower(0);
                 break;
             case ANTISTALL:
-                
+                intakeMotor.setTargetPower(-0.2);
                 break;
             case REVERSE:
                 intakeMotor.setTargetPower(-0.5);

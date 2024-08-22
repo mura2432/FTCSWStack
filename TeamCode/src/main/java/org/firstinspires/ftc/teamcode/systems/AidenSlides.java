@@ -19,8 +19,6 @@ public class AidenSlides{
     public SlidesState slidesState;
     double kp = 1;
     double powerConstant = 0.1;
-    double slidesPower = 1.0;
-    double targetPosition;
 
 
     public AidenSlides(HardwareMap hardwareMap, HardwareQueue hardwareQueue) {
@@ -29,7 +27,7 @@ public class AidenSlides{
         hardwareQueue.addDevice(slideMotor);
     }
 
-    public void slidesUpdate(){
+    public void slidesUpdate(double slidesPower, double targetPosition){
         switch (slidesState){
             case ON:
                 double currentPosition = slidesMotor.motor[0].getCurrentPosition();

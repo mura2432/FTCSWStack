@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.systems;
 
-import org.firstinspires.ftc.teamcode.opmodes.AidenIntake;
-import org.firstinspires.ftc.teamcode.opmodes.AidenSlides;
+import org.firstinspires.ftc.teamcode.systems.AidenIntake;
+import org.firstinspires.ftc.teamcode.systems.AidenSlides;
 import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityServo;
 
@@ -15,50 +15,55 @@ public class AidenDeposit {
     public AidenRevolveArm aidenRevolveArm;
     public AidenV4Arm aidenV4Arm;
     public AidenFlippers aidenFlippers;
+    public AidenSlides slides;
     public AidenDeposit(HardwareQueue hardwareQueue, HardwareMap hardwareMap){
         aidenRevolveArm = new AidenRevolveArm(hardwareQueue, hardwareMap);
         aidenV4Arm = new AidenV4Arm(hardwareQueue, hardwareMap);
         aidenFlippers = new AidenFlippers(hardwareQueue, hardwareMap);
+        slides = new AidenSlides(hardwareMap, hardwareQueue);
     }
     public enum DepositState{
-        LeftFlipperUp,
-        LeftFlipperDown,
-        RightFlipperUp,
-        RightFlipperDown,
-        WristFlip,
-        WristUnflip,
-        ArmUp,
-        ArmDown,
-        OFF
+        BASE,
+        GRAB,
+        LIFT,
+        UP,
+        DOWN,
+        FLIP,
+        LEFTRELEASE,
+        RIGHTRELEASE,
+        RESET
+
     }
-    AidenDeposit.DepositState depositState = DepositState;
+    AidenDeposit.DepositState depositState = DepositState.BASE;
     public void DepositUpdate(){
         switch (depositState){
-            case OFF:
-                break;
-            case LeftFlipperUp:
+            case BASE:
                 aidenFlippers.leftOpen();
-                break;
-            case LeftFlipperDown:
-                aidenFlippers.leftClose();
-                break;
-            case RightFlipperUp:
                 aidenFlippers.rightOpen();
+                aidenV4Arm.unrotate();
+                slides.slidesUpdate(1.0, 0.5);
                 break;
-            case RightFlipperDown:
+            case GRAB:
+                aidenFlippers.leftClose();
                 aidenFlippers.rightClose();
                 break;
-            case WristFlip:
-                aidenRevolveArm.flip();
-                break;
-            case WristUnflip:
-                aidenRevolveArm.unflip();
-                break;
-            case ArmUp:
+            case LIFT:
                 aidenV4Arm.rotate();
                 break;
-            case ArmDown:
-                aidenV4Arm.unrotate();
+            case UP:
+                slides.slidesUpdate(1.0, 0.5);
+                break;
+            case DOWN:
+                slides.slidesUpdate(1.0, 0.5);
+                break;
+            case FLIP:
+                aidenRevolveArm.flip();
+                break;
+            case LEFTRELEASE:
+                aidenFlippers.leftOpen();
+                break;
+            case RIGHTRELEASE:
+                aidenFlippers.rightOpen();
                 break;
         }
     }
