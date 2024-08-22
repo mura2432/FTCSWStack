@@ -11,13 +11,13 @@ public class AidenRobot{
     public HardwareQueue hardwareQueue;
     public AidenIntake intake;
     public AidenSlides slides;
-    public AidenSensors sensors;
+    public AidenSensors sensor;
     public AidenDeposit deposit;
     public AidenDriveTrain driveTrain;
 
     public AidenRobot(HardwareMap hardwareMap){
         hardwareQueue = new HardwareQueue();
-        sensors = new AidenSensors(hardwareMap, hardwareQueue);
+        sensor = new AidenSensors(hardwareMap, hardwareQueue);
         driveTrain = new AidenDriveTrain();
         intake = new AidenIntake(hardwareMap, hardwareQueue);
         slides = new AidenSlides(hardwareMap, hardwareQueue);
@@ -25,7 +25,11 @@ public class AidenRobot{
     }
 
     public void update(){
-
+        intake.updateIntake();
+        deposit.DepositUpdate();
+        slides.slidesUpdate();
+        sensor.updateSensors();
+        driveTrain.
     }
 
 }

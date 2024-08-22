@@ -41,7 +41,7 @@ public class AidenDeposit {
                 aidenFlippers.leftOpen();
                 aidenFlippers.rightOpen();
                 aidenV4Arm.unrotate();
-                slides.slidesUpdate(1.0, 0.5);
+                slides.slidesUpdate();
                 break;
             case GRAB:
                 aidenFlippers.leftClose();
@@ -51,10 +51,10 @@ public class AidenDeposit {
                 aidenV4Arm.rotate();
                 break;
             case UP:
-                slides.slidesUpdate(1.0, 0.5);
+                slides.slidesUpdate();
                 break;
             case DOWN:
-                slides.slidesUpdate(1.0, 0.5);
+                slides.slidesUpdate();
                 break;
             case FLIP:
                 aidenRevolveArm.flip();
