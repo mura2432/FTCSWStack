@@ -1,48 +1,55 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
+import android.renderscript.RenderScript;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-@TeleOp
-public class AidenDriveTrain extends LinearOpMode {
-    @Override
-    public void runOpMode() throws InterruptedException {
-        
-        DcMotor frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
-        DcMotor backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
-        DcMotor frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
-        DcMotor backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+import org.firstinspires.ftc.teamcode.systems.AidenSensors;
+import org.firstinspires.ftc.teamcode.systems.JamesSensors;
+import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
+import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
 
 
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+public class AidenDriveTrain{
+    public HardwareQueue hardwareQueue;
+    public HardwareMap hardwareMap;
+    public AidenSensors sensor;
+    public PriorityMotor leftF, leftB, rightF, rightB;
 
-        waitForStart();
+    public AidenDriveTrain(HardwareQueue hardwareQueue, HardwareMap hardwareMap, AidenSensors sensors){
+        this.hardwareQueue = hardwareQueue;
+        this.sensor = sensor;
 
-        if (isStopRequested()) return;
+        leftF = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "leftFront"), "leftFront", 3, 5);
+        leftB = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "leftBack"), "leftBack", 3, 5);
+        rightF = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "rightFront"), "rightFront", 3, 5);
+        rightB = new PriorityMotor(hardwareMap.get(DcMotorEx.class, "rightBack"), "rightBack", 3, 5);
 
-        while (opModeIsActive()) {
-            double y = -gamepad1.left_stick_y;
-            double x = gamepad1.left_stick_x * 1.1;
-            double rx = gamepad1.right_stick_x;
-            boolean intake = gamepad1.b;
-            boolean slidesup = gamepad1.y;
-            boolean slidesdown = gamepad1.a;
+        hardwareQueue.addDevice(leftF);
+        hardwareQueue.addDevice(leftB);
+        hardwareQueue.addDevice(rightF);
+        hardwareQueue.addDevice(rightB);
+    }
+    public void drivetrain(Gamepad gamepad){
+        double forward = gamepad.left_stick_y * -1;
+        double strafe = gamepad.left_stick_x * 1.1;
+        double turn = 0.9 * gamepad.right_stick_x;
 
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
+        double denom = Math.max(Math.abs(forward) + Math.abs(strafe) + Math.abs(turn), 1.0);
+        double leftFrontPower = (forward + strafe + turn)/ denom;
+        double leftBackPower = (forward - strafe + turn) / denom;
+        double rightFrontPower = (forward - strafe - turn) / denom;
+        double rightBackPower = (forward + strafe - turn) / denom;
 
-            frontLeftMotor.setPower(frontLeftPower);
-            backLeftMotor.setPower(backLeftPower);
-            frontRightMotor.setPower(frontRightPower);
-            backRightMotor.setPower(backRightPower);
-
-
-        }
+        leftF.setTargetPower(leftFrontPower);
+        leftB.setTargetPower(leftBackPower);
+        rightF.setTargetPower(rightFrontPower);
+        rightB.setTargetPower(rightBackPower);
     }
 }

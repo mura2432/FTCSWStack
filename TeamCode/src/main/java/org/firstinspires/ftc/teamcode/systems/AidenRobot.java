@@ -18,7 +18,7 @@ public class AidenRobot{
     public AidenRobot(HardwareMap hardwareMap){
         hardwareQueue = new HardwareQueue();
         sensor = new AidenSensors(hardwareMap, hardwareQueue);
-        driveTrain = new AidenDriveTrain();
+        driveTrain = new AidenDriveTrain( hardwareQueue, hardwareMap, sensor);
         intake = new AidenIntake(hardwareMap, hardwareQueue);
         slides = new AidenSlides(hardwareMap, hardwareQueue);
         deposit = new AidenDeposit(hardwareQueue, hardwareMap);
@@ -28,9 +28,7 @@ public class AidenRobot{
         intake.updateIntake();
         deposit.DepositUpdate();
         slides.slidesUpdate();
-        sensor.updateSensors();
-        driveTrain.
+        sensor.getSlides();
     }
 
-}
 }

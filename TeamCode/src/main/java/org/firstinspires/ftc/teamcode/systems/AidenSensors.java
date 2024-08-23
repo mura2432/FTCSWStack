@@ -5,26 +5,22 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.utils.priority.HardwareQueue;
 import org.firstinspires.ftc.teamcode.utils.priority.PriorityMotor;
+import java.util.List;
+
 
 public class AidenSensors {
     private LynxModule controlHub, expansionHub;
-    private int slidesPos;
+    public double slidesPos;
     private HardwareQueue hardwareQueue;
 
     public AidenSensors(HardwareMap hardwareMap, HardwareQueue hardwareQueue) {
-        this.hardwareQueue = hardwareQueue;
-        controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
-        controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        expansionHub = hardwareMap.get(LynxModule.class, "Expansion Hub");
-        expansionHub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule hub : allHubs) {
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
     }
-    public void update(){
-        updateControlHub();
-    }
-
-    private void updateControlHub(){
+    public double getSlides(){
         slidesPos = ((PriorityMotor) hardwareQueue.getDevice("slides")).motor[0].getCurrentPosition() * -1;
-
+        return slidesPos;
     }
-
 }
