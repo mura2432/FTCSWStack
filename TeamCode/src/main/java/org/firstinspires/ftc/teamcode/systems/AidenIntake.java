@@ -20,7 +20,7 @@ public class AidenIntake extends OpMode {
         REVERSE
     };
     IntakeState intakeState = IntakeState.INTAKE_OFF;
-    public void updateIntake(){
+    public void updateIntake() {
         switch (intakeState) {
             case INTAKE_ON:
                 intakeMotor.setTargetPower(0.45);
@@ -35,5 +35,15 @@ public class AidenIntake extends OpMode {
             case REVERSE:
                 intakeMotor.setTargetPower(-0.5);
                 break;
+        }
+    }
+    public void intakeStart(){
+        intakeState = IntakeState.INTAKE_ON;
+    }
+    public void intakeOff(){
+        intakeState = IntakeState.INTAKE_OFF;
+    }
+    public void intakeReverse(){
+        intakeState = IntakeState.REVERSE;
     }
 }
