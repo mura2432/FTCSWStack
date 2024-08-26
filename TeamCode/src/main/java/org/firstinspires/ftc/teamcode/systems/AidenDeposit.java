@@ -30,9 +30,7 @@ public class AidenDeposit {
         DOWN,
         FLIP,
         LEFTRELEASE,
-        RIGHTRELEASE,
-        RESET
-
+        RIGHTRELEASE
     }
     AidenDeposit.DepositState depositState = DepositState.BASE;
     public void DepositUpdate(){
@@ -67,4 +65,11 @@ public class AidenDeposit {
                 break;
         }
     }
+    public void base(){depositState = DepositState.BASE;}
+    public void grab(){depositState = DepositState.GRAB;}
+    public void lift(){depositState = DepositState.LIFT;}
+    public void flip(){depositState = DepositState.FLIP;}
+    public void leftR(){depositState = DepositState.LEFTRELEASE;}
+    public void rightR(){depositState = DepositState.RIGHTRELEASE;}
+
 }
